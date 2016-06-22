@@ -1,0 +1,40 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="iris-scrolling-text">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <marquee behavior="scroll" direction="right">[[text]]</marquee>
+  </template>
+  <script>
+    (function() {
+      'use strict'
+      Polymer({
+        is: 'iris-scrolling-text',
+        properties: {
+          source: {
+            type: String,
+            observer: '_sourceChanged(source)'
+          },
+          text: {
+            type: String
+          }
+        },
+        _sourceChanged(source) {
+          let server = '???';
+          let port = '???';
+          let url = server + ':' + port + source;
+          fetch(url, {
+            cache: "reload"
+          }).then(r => r.text()).then(r => {
+            this.set('text', r);
+          });
+        }
+      });
+
+    })();
+  </script>
+</dom-module>
