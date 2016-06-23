@@ -7,6 +7,8 @@
         display: block;
       }
     </style>
+    <iris-settings-access id="settings"></iris-settings-access>
+
     <marquee behavior="scroll" direction="right">[[text]]</marquee>
   </template>
   <script>
@@ -24,13 +26,15 @@
           }
         },
         _sourceChanged(source) {
-          let server = '???';
-          let port = '???';
-          let url = server + ':' + port + source;
+          let server = this.$.settings.getItem('data_server');
+          let port = this.$.settings.getItem('data_port');
+          let root = port ? (server + ':' + port) : server;
+
+          let url = root + source;
           fetch(url, {
             cache: "reload"
-          }).then(r => r.text()).then(r => {
-            this.set('text', r);
+          }).then(r => r.text()).then(text => {
+            this.set('text', text);
           });
         }
       });
