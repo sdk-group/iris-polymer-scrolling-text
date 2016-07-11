@@ -8,6 +8,7 @@
       }
     </style>
     <iris-settings-access id="settings"></iris-settings-access>
+    <iris-content-import content="{{text}}" dest="[[source]]"></iris-content-import>
 
     <marquee behavior="scroll" direction="right">[[text]]</marquee>
   </template>
@@ -18,24 +19,11 @@
         is: 'iris-scrolling-text',
         properties: {
           source: {
-            type: String,
-            observer: '_sourceChanged(source)'
+            type: String
           },
           text: {
             type: String
           }
-        },
-        _sourceChanged(source) {
-          let server = this.$.settings.getItem('data_server');
-          let port = this.$.settings.getItem('data_port');
-          let root = port ? (server + ':' + port) : server;
-
-          let url = root + source;
-          fetch(url, {
-            cache: "reload"
-          }).then(r => r.text()).then(text => {
-            this.set('text', text);
-          });
         }
       });
 
