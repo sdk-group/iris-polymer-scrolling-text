@@ -33,7 +33,6 @@
         animation: scroll-left 20s linear infinite;
       }
       /* Move it (define the animation) */
-
       @-moz-keyframes scroll-left {
         0% {
           -moz-transform: translateX(100%);
@@ -42,7 +41,6 @@
           -moz-transform: translateX(-100%);
         }
       }
-
       @-webkit-keyframes scroll-left {
         0% {
           -webkit-transform: translateX(100%);
@@ -51,7 +49,6 @@
           -webkit-transform: translateX(-100%);
         }
       }
-
       @keyframes scroll-left {
         0% {
           -moz-transform: translateX(100%);
@@ -68,19 +65,20 @@
           transform: translateX(-100%);
         }
       }
+
     </style>
     <iris-settings-access id="settings"></iris-settings-access>
-    <iris-content-import content="{{text}}" dest="[[source]]"></iris-content-import>
-
+    <iris-content-import id="importer" content="{{text}}" dest="[[source]]"></iris-content-import>
 
     <div class="scroll-left">
-      <p>[[text]] </p>
+      <p>[[text]]
+      </p>
     </div>
 
     <!-- <marquee behavior="scroll" direction="right">[[text]]</marquee> -->
   </template>
   <script>
-    (function() {
+    (function () {
       'use strict'
       Polymer({
         is: 'iris-scrolling-text',
@@ -90,7 +88,22 @@
           },
           text: {
             type: String
+          },
+          reloadInterval: {
+            type: Number,
+            value: 0,
+            observer: "_reloadIntervalChanged"
           }
+        },
+        _reloadIntervalChanged(int) {
+          this.timer && clearInterval(this.timer);
+
+          if (!int)
+            return;
+
+          this.timer = setInterval(() => {
+            this.$.importer.reload();
+          }, int * 1000 * 60);
         }
       });
 
